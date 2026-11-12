@@ -786,7 +786,6 @@ function parseDT(s,order){
   }
   return null;
 }
-/* Decide month/day order for a whole column: explicit setting wins, otherwise evidence, otherwise separator convention */
 function detectOrder(vals){
   if(S.cfg.dateFmt==="mdy"||S.cfg.dateFmt==="dmy") return S.cfg.dateFmt;
   let dmy=0,mdy=0,dash=0,slash=0;
@@ -817,7 +816,6 @@ const titleCase=s=>/[a-z]/.test(s)?s:String(s||"").toLowerCase().replace(/(^|[\s
 const nameKey=s=>String(s||"").toLowerCase().replace(/[^a-z\s,]/g,"").replace(/,/g," ").split(/\s+/).filter(Boolean).sort().join(" ");
 
 let parseAsync=async file=>parseCSV(await file.text());   // replaced by a background worker in the beta
-/* ---------------- State ---------------- */
 const DEF={idle:30,winMode:"all",winStart:"11:00",winEnd:"15:00",grace:0,exFailed:true,
   meal:{on:false,over:5,min:30,after:1,by:5,buffer:0,todOn:false,todStart:"11:00",todEnd:"15:00",s2on:false,s2over:10,s2by:10},h24:false,theme:"",dateFmt:"auto",weekStart:0,payEx:[]};
 const S={
@@ -831,7 +829,6 @@ function save(){ try{ localStorage.setItem("agencia.cfg",JSON.stringify(S.cfg));
 /* department / station columns (Paycom: Home Department Desc, Home Delivery Station Code; ADP: Worked Department) */
 function deptCols(c){ return {dept:findCol(c,/^department$/i,/home\s*department\s*desc/i,/^department\s*desc/i,/dist\s*department\s*desc/i,/worked\s*department/i,/home\s*department$/i),
   station:findCol(c,/^station$/i,/home\s*delivery\s*station\s*code\s*code/i,/delivery\s*station\s*code$/i,/station\s*code/i,/station/i)}; }
-/* ---------------- File typing ---------------- */
 function classify(cols){
   const j=cols.join("|").toLowerCase();
   if(/time of last action|delivery status|stop number|tba/.test(j)) return "activity";
@@ -1131,7 +1128,6 @@ function computeBucket(raw,cfg,grace){
   }
   b.longest=0; for(let i=1;i<times.length;i++) b.longest=Math.max(b.longest,(times[i]-times[i-1])/MIN);
 
-  // ---------- meal-break planner ----------
   b.plan=planBreaks(b,times,cfg.meal);
   if(b.plan) for(const m of b.plan.findings) b.meal.push(m);
 
@@ -1183,7 +1179,6 @@ function filtered(){
     return true;
   });
 }
-/* Idle-gap matrix: one row per employee, one column per day in the period */
 function gapMatrix(B,days){
   const rows=new Map();
   for(const b of B){
@@ -1958,7 +1953,6 @@ function gapsPdf(){
   download(P.output(pdfFooterFn()),stamp("Idle_Gaps")+".pdf");
   toast("Gaps report (PDF) downloaded");
 }
-/* ---------- Boot ---------- */
 syncControls(); render();
 </script>
 <script>
